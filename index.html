@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Bislad Web</title>
+	<link rel="stylesheet" href="style.css">
+	<link
+	rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+  />
+  <!-- Google Fonts -->
+  <link
+	href="https://fonts.googleapis.com/css2?family=Poppins&family=Roboto+Mono:wght@500&display=swap"
+	rel="stylesheet"
+  />
+  <!-- Stylesheet -->
+
+</head>
+<body>
+
+	<div class="data-head">Temperature Readings</div>
+
+	<div class="data-container">
+		<div class="data-item">
+			<h1>Temperature</h1>
+			<p class="value" id="temperature">22 &#8451;</p>
+		</div>
+			
+	</div>
+	  <div class="wrapper">
+		<div class="timer-display">00:00:00</div>
+		<div class="container">
+		  <div class="inputs">
+			<input
+			  type="number"
+			  id="hourInput"
+			  placeholder="00"
+			  min="0"
+			  max="23"
+			/>
+			<input
+			  type="number"
+			  id="minuteInput"
+			  placeholder="00"
+			  min="0"
+			  max="59"
+			/>
+		  </div>
+		  <button id="set">Add Alarm</button>
+		  <div class="activeAlarms"></div>
+		</div>
+			<!-- Stop Alarm Button -->
+	  <div class="timer-display-container">
+		<button id="stopAlarmBtn" class="stop-alarm-btn">Stop Alarm</button>
+	  </div>
+	  </div>
+
+
+	<!-- the scripts for products you want to access must be added-->
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-database.js"></script>
+
+    <script>
+        // TODO: Replace with your Firebase project configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAW1VOq7xnt7Ivlzz5V21EBIDK2JLJOWEY",
+            authDomain: "e-bislad.firebaseapp.com",
+            databaseURL: "https://e-bislad-default-rtdb.firebaseio.com",
+            projectId: "e-bislad",
+            storageBucket: "e-bislad.appspot.com",
+            messagingSenderId: "333428540600",
+            appId: "1:333428540600:web:8a56de80a8ab490c9d204d",
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Reference to your temperature data in Firebase Realtime Database
+        const temperatureRef = database.ref('Machine_Temperature/temperatureC');
+
+        // Debugging: Log if the initialization is correct
+        console.log("Firebase Initialized");
+
+        // Listen for changes to the temperature data
+        temperatureRef.on('value', (snapshot) => {
+            if (snapshot.exists()) {
+                const temperature = snapshot.val();
+                console.log("Temperature Data:", temperature);
+                document.getElementById('temperature').innerText = temperature + ' °C';
+            } else {
+                console.log("No data available");
+                document.getElementById('temperature').innerText = "No data available";
+            }
+        }, (errorObject) => {
+            console.log("The read failed: " + errorObject.name);
+            document.getElementById('temperature').innerText = "Error reading data";
+        });
+
+    </script>
+ <script src="script.js"></script>
+
+</body>
+</html>
